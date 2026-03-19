@@ -1,0 +1,9 @@
+enum QuestionType {
+  TEXT
+  MULTIPLE_CHOICE
+  CHECKBOX
+  DATE
+}
+
+type Query
+type Mutation

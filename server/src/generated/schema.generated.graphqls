@@ -1,0 +1,53 @@
+type Answer {
+  questionId: ID!
+  value: String!
+}
+
+input AnswerInput {
+  questionId: ID!
+  value: String!
+}
+
+type Form {
+  description: String
+  id: ID!
+  questions: [Question!]!
+  title: String!
+}
+
+type Mutation {
+  createForm(description: String, questions: [QuestionInput], title: String!): Form!
+  submitResponse(answers: [AnswerInput]!, formId: ID!): Response!
+}
+
+type Query {
+  form(id: ID!): Form
+  forms: [Form!]!
+  responses(formId: ID!): [Response!]!
+}
+
+type Question {
+  id: ID!
+  options: [String]
+  text: String!
+  type: QuestionType!
+}
+
+input QuestionInput {
+  options: [String]
+  text: String!
+  type: QuestionType!
+}
+
+enum QuestionType {
+  CHECKBOX
+  DATE
+  MULTIPLE_CHOICE
+  TEXT
+}
+
+type Response {
+  answers: [Answer!]!
+  formId: ID!
+  id: ID!
+}

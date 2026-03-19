@@ -1,0 +1,23 @@
+type Answer {
+  questionId: ID!
+  value: String!
+}
+
+type Response {
+  id: ID!
+  formId: ID!
+  answers: [Answer!]!
+}
+
+input AnswerInput {
+  questionId: ID!
+  value: String!
+}
+
+extend type Query {
+  responses(formId: ID!): [Response!]!
+}
+
+extend type Mutation {
+  submitResponse(formId: ID!, answers: [AnswerInput]!): Response!
+}

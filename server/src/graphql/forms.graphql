@@ -1,0 +1,28 @@
+type Form {
+  id: ID!
+  title: String!
+  description: String
+  questions: [Question!]!
+}
+
+type Question {
+  id: ID!
+  text: String!
+  type: QuestionType!
+  options: [String]
+}
+
+input QuestionInput {
+  text: String!
+  type: QuestionType!
+  options: [String]
+}
+
+extend type Query {
+  forms: [Form!]!
+  form(id: ID!): Form
+}
+
+extend type Mutation {
+  createForm(title: String!, description: String, questions: [QuestionInput]): Form!
+}

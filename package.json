@@ -3,16 +3,26 @@
   "private": true,
   "workspaces": [
     "client",
-    "server"
+    "server",
+    "packages/*"
   ],
   "scripts": {
-     "dev": "concurrently -n client,server -c cyan,green \"npm run dev -w client\" \"npm run dev -w server\""
+    "dev": "concurrently -n client,server,codegen -c cyan,green,yellow \"npm run dev -w client\" \"npm run dev -w server\" \"npx graphql-codegen --watch\"",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "codegen:watch": "graphql-codegen --config codegen.ts --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@eddeee888/gcg-typescript-resolver-files": "^0.15.0",
+    "@graphql-codegen/cli": "^6.2.1",
+    "@graphql-codegen/typescript": "^5.0.9",
+    "@graphql-codegen/typescript-operations": "^5.0.9",
+    "@graphql-codegen/typescript-resolvers": "^5.1.7",
+    "@graphql-codegen/typescript-rtk-query": "^4.0.0",
+    "@parcel/watcher": "^2.5.6",
     "concurrently": "^9.2.1"
   }
 }
