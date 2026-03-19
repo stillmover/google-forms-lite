@@ -14,9 +14,11 @@ export const useCreateFormBuilder = () => {
   const draft = useAppSelector((state) => state.forms.createDraft)
   const [createForm, { isLoading }] = useCreateFormMutation()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const saveForm = async () => {
     setErrorMessage(null)
+    setSuccessMessage(null)
 
     const validationError = validateCreateFormDraft(draft)
     if (validationError) {
@@ -27,7 +29,8 @@ export const useCreateFormBuilder = () => {
     try {
       await createForm(toCreateFormPayload(draft)).unwrap()
       dispatch(resetCreateDraft())
-      navigate('/')
+      setSuccessMessage('Form created successfully. Redirecting to Home...')
+      setTimeout(() => navigate('/'), 1200)
       return true
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Failed to save form.')
@@ -39,6 +42,7 @@ export const useCreateFormBuilder = () => {
     draft,
     isLoading,
     errorMessage,
+    successMessage,
     saveForm,
   }
 }

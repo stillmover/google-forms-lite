@@ -19,13 +19,11 @@ type CreateFormDraft = {
 
 type FormsState = {
   list: FormListItem[]
-  currentFormId: string | null
   createDraft: CreateFormDraft
 }
 
 const initialState: FormsState = {
   list: [],
-  currentFormId: null,
   createDraft: {
     title: '',
     description: '',
@@ -41,9 +39,6 @@ const formsSlice = createSlice({
   reducers: {
     setForms: (state, action: PayloadAction<FormListItem[]>) => {
       state.list = action.payload
-    },
-    setCurrentFormId: (state, action: PayloadAction<string | null>) => {
-      state.currentFormId = action.payload
     },
     updateCreateDraft: (state, action: PayloadAction<Partial<CreateFormDraft>>) => {
       state.createDraft = {
@@ -164,7 +159,6 @@ export const selectCreateFormMutationInput = (state: FormsState): {
 
 export const {
   setForms,
-  setCurrentFormId,
   updateCreateDraft,
   addDraftQuestion,
   removeDraftQuestion,

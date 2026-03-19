@@ -19,7 +19,7 @@ import { QUESTION_TYPE_OPTIONS, isChoiceQuestionType } from '../utils/questionTy
 export function CreateFormPage() {
   const dispatch = useAppDispatch()
   const draft = useAppSelector((state) => state.forms.createDraft)
-  const { isLoading, errorMessage, saveForm } = useCreateFormBuilder()
+  const { isLoading, errorMessage, successMessage, saveForm } = useCreateFormBuilder()
 
   return (
     <div className="space-y-6">
@@ -210,6 +210,9 @@ export function CreateFormPage() {
 
       {errorMessage && (
         <Toast type="error" message={errorMessage} />
+      )}
+      {successMessage && (
+        <Toast type="success" message={successMessage} />
       )}
 
       <div className="flex justify-end gap-3">

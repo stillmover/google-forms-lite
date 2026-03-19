@@ -2,10 +2,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useFormQuery, useResponsesQuery } from '../api/enhancedApi'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import {
-  setCurrentResponsesFormId,
-  setResponsesForForm,
-} from '../store/responsesSlice'
+import { setResponsesForForm } from '../store/responsesSlice'
 import { EmptyState, ErrorState, LoadingState } from '../ui/AsyncState'
 
 export function FormResponsesPage() {
@@ -24,7 +21,6 @@ export function FormResponsesPage() {
   )
 
   useEffect(() => {
-    dispatch(setCurrentResponsesFormId(formId))
     if (data?.responses) {
       dispatch(setResponsesForForm({ formId, responses: data.responses }))
     }
