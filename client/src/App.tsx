@@ -25,7 +25,7 @@ function App() {
         <Route path="/forms/new" element={<CreateFormPage />} />
         <Route path="/forms/:id/fill" element={<FormFillPage />} />
         <Route path="/forms/:formId" element={<FormViewPage />} />
-        <Route path="/forms/:formId/responses" element={<FormResponsesPage />} />
+        <Route path="/forms/:id/responses" element={<FormResponsesPage />} />
       </Routes>
     </div>
   )
