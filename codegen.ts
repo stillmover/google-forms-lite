@@ -16,10 +16,20 @@ const config: CodegenConfig = {
     }),
 
     'client/src/api/generated.ts': {
-      plugins: ['typescript', 'typescript-operations', 'typescript-rtk-query'],
+      plugins: [
+        {
+          add: {
+            content:
+              'class TypedDocumentString<TResult = unknown, TVariables = unknown> extends String { declare __apiType?: [TResult, TVariables] }',
+          },
+        },
+        'typescript',
+        'typescript-operations',
+        'typescript-rtk-query',
+      ],
       config: {
         importBaseApiFrom: './baseApi',
-        documentMode: 'graphQLTag',
+        documentMode: 'documentNode',
         enumsAsTypes: true,
         exportHooks: true,
       },

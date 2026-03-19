@@ -1,11 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  useFormQuery,
-  useSubmitResponseMutation,
-  type AnswerInput,
-  type QuestionType,
-} from '../api/generated'
+import type { AnswerInput, QuestionType } from '../api/generated'
+import { useFormQuery, useSubmitResponseMutation } from '../api/enhancedApi'
 
 type AnswersState = Record<string, string | string[]>
 

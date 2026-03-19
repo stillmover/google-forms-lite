@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useCreateFormMutation, type QuestionInput, type QuestionType } from '../api/generated'
+import type { QuestionInput, QuestionType } from '../api/generated'
+import { useCreateFormMutation } from '../api/enhancedApi'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
   addDraftQuestion,

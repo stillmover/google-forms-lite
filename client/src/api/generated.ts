@@ -1,4 +1,5 @@
 import { api } from './baseApi';
+class TypedDocumentString<TResult = unknown, TVariables = unknown> extends String { declare __apiType?: [TResult, TVariables] }
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -134,7 +135,7 @@ export type SubmitResponseMutationVariables = Exact<{
 export type SubmitResponseMutation = { __typename?: 'Mutation', submitResponse: { __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: string }> } };
 
 
-export const FormsDocument = `
+export const FormsDocument = new TypedDocumentString(`
     query Forms {
   forms {
     id
@@ -142,8 +143,8 @@ export const FormsDocument = `
     description
   }
 }
-    `;
-export const FormDocument = `
+    `);
+export const FormDocument = new TypedDocumentString(`
     query Form($id: ID!) {
   form(id: $id) {
     id
@@ -157,8 +158,8 @@ export const FormDocument = `
     }
   }
 }
-    `;
-export const ResponsesDocument = `
+    `);
+export const ResponsesDocument = new TypedDocumentString(`
     query Responses($formId: ID!) {
   responses(formId: $formId) {
     id
@@ -169,8 +170,8 @@ export const ResponsesDocument = `
     }
   }
 }
-    `;
-export const CreateFormDocument = `
+    `);
+export const CreateFormDocument = new TypedDocumentString(`
     mutation CreateForm($title: String!, $description: String, $questions: [QuestionInput]) {
   createForm(title: $title, description: $description, questions: $questions) {
     id
@@ -184,8 +185,8 @@ export const CreateFormDocument = `
     }
   }
 }
-    `;
-export const SubmitResponseDocument = `
+    `);
+export const SubmitResponseDocument = new TypedDocumentString(`
     mutation SubmitResponse($formId: ID!, $answers: [AnswerInput]!) {
   submitResponse(formId: $formId, answers: $answers) {
     id
@@ -196,7 +197,7 @@ export const SubmitResponseDocument = `
     }
   }
 }
-    `;
+    `);
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({

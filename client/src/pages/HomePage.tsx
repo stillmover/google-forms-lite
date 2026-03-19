@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useFormsQuery } from '../api/generated'
+import { useFormsQuery } from '../api/enhancedApi'
 import { useAppDispatch } from '../store/hooks'
 import { setCurrentFormId, setForms } from '../store/formsSlice'
 import { setCurrentResponsesFormId } from '../store/responsesSlice'

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { api } from '../api/generated'
+import { api } from '../api/enhancedApi'
 import { formsReducer } from './formsSlice'
 import { responsesReducer } from './responsesSlice'
 
