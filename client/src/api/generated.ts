@@ -102,6 +102,13 @@ export type FormsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FormsQuery = { __typename?: 'Query', forms: Array<{ __typename?: 'Form', id: string, title: string, description?: string | null }> };
 
+export type FormQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FormQuery = { __typename?: 'Query', form?: { __typename?: 'Form', id: string, title: string, description?: string | null, questions: Array<{ __typename?: 'Question', id: string, text: string, type: QuestionType, options?: Array<string | null> | null }> } | null };
+
 export type ResponsesQueryVariables = Exact<{
   formId: Scalars['ID']['input'];
 }>;
@@ -118,6 +125,14 @@ export type CreateFormMutationVariables = Exact<{
 
 export type CreateFormMutation = { __typename?: 'Mutation', createForm: { __typename?: 'Form', id: string, title: string, description?: string | null, questions: Array<{ __typename?: 'Question', id: string, text: string, type: QuestionType, options?: Array<string | null> | null }> } };
 
+export type SubmitResponseMutationVariables = Exact<{
+  formId: Scalars['ID']['input'];
+  answers: Array<InputMaybe<AnswerInput>> | InputMaybe<AnswerInput>;
+}>;
+
+
+export type SubmitResponseMutation = { __typename?: 'Mutation', submitResponse: { __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: string }> } };
+
 
 export const FormsDocument = `
     query Forms {
@@ -125,6 +140,21 @@ export const FormsDocument = `
     id
     title
     description
+  }
+}
+    `;
+export const FormDocument = `
+    query Form($id: ID!) {
+  form(id: $id) {
+    id
+    title
+    description
+    questions {
+      id
+      text
+      type
+      options
+    }
   }
 }
     `;
@@ -155,11 +185,26 @@ export const CreateFormDocument = `
   }
 }
     `;
+export const SubmitResponseDocument = `
+    mutation SubmitResponse($formId: ID!, $answers: [AnswerInput]!) {
+  submitResponse(formId: $formId, answers: $answers) {
+    id
+    formId
+    answers {
+      questionId
+      value
+    }
+  }
+}
+    `;
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     Forms: build.query<FormsQuery, FormsQueryVariables | void>({
       query: (variables) => ({ document: FormsDocument, variables })
+    }),
+    Form: build.query<FormQuery, FormQueryVariables>({
+      query: (variables) => ({ document: FormDocument, variables })
     }),
     Responses: build.query<ResponsesQuery, ResponsesQueryVariables>({
       query: (variables) => ({ document: ResponsesDocument, variables })
@@ -167,9 +212,12 @@ const injectedRtkApi = api.injectEndpoints({
     CreateForm: build.mutation<CreateFormMutation, CreateFormMutationVariables>({
       query: (variables) => ({ document: CreateFormDocument, variables })
     }),
+    SubmitResponse: build.mutation<SubmitResponseMutation, SubmitResponseMutationVariables>({
+      query: (variables) => ({ document: SubmitResponseDocument, variables })
+    }),
   }),
 });
 
 export { injectedRtkApi as api };
-export const { useFormsQuery, useLazyFormsQuery, useResponsesQuery, useLazyResponsesQuery, useCreateFormMutation } = injectedRtkApi;
+export const { useFormsQuery, useLazyFormsQuery, useFormQuery, useLazyFormQuery, useResponsesQuery, useLazyResponsesQuery, useCreateFormMutation, useSubmitResponseMutation } = injectedRtkApi;
 

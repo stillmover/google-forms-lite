@@ -1,5 +1,6 @@
 import { Link, Route, Routes } from 'react-router-dom'
 import { CreateFormPage } from './pages/CreateFormPage'
+import { FormFillPage } from './pages/FormFillPage'
 import { FormResponsesPage } from './pages/FormResponsesPage'
 import { FormViewPage } from './pages/FormViewPage'
 import { HomePage } from './pages/HomePage'
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/forms/new" element={<CreateFormPage />} />
+        <Route path="/forms/:id/fill" element={<FormFillPage />} />
         <Route path="/forms/:formId" element={<FormViewPage />} />
         <Route path="/forms/:formId/responses" element={<FormResponsesPage />} />
       </Routes>

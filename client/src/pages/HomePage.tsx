@@ -64,10 +64,10 @@ export function HomePage() {
               <div className="mt-4 flex gap-3">
                 <Link
                   className="rounded-md bg-slate-100 px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-200"
-                  to={`/forms/${form.id}`}
+                  to={`/forms/${form.id}/fill`}
                   onClick={() => dispatch(setCurrentFormId(form.id))}
                 >
-                  View Form
+                  Fill Form
                 </Link>
                 <Link
                   className="rounded-md bg-indigo-100 px-3 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200"
