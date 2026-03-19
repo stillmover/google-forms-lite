@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import type { QuestionInput, QuestionType } from '../api/generated'
-import { useCreateFormMutation } from '../api/enhancedApi'
+import type { QuestionType } from '../api/generated'
+import { useCreateFormBuilder } from '../hooks/useCreateFormBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
   addDraftQuestion,
@@ -14,64 +12,12 @@ import {
   updateDraftQuestion,
   updateDraftQuestionOption,
 } from '../store/formsSlice'
-
-const questionTypeOptions: Array<{ value: QuestionType; label: string }> = [
-  { value: 'TEXT', label: 'Text Input' },
-  { value: 'MULTIPLE_CHOICE', label: 'Multiple Choice' },
-  { value: 'CHECKBOX', label: 'Checkboxes' },
-  { value: 'DATE', label: 'Date' },
-]
-
-const supportsOptions = (type: QuestionType) =>
-  type === 'MULTIPLE_CHOICE' || type === 'CHECKBOX'
+import { QUESTION_TYPE_OPTIONS, isChoiceQuestionType } from '../utils/questionType'
 
 export function CreateFormPage() {
-  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const draft = useAppSelector((state) => state.forms.createDraft)
-  const [createForm, { isLoading }] = useCreateFormMutation()
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const handleSave = async () => {
-    setErrorMessage(null)
-
-    const title = draft.title.trim()
-    if (!title) {
-      setErrorMessage('Form title is required.')
-      return
-    }
-
-    const hasInvalidQuestions = draft.questions.some((question) => {
-      if (!question.text.trim()) return true
-      if (!supportsOptions(question.type)) return false
-      return question.options.map((option) => option.trim()).filter(Boolean).length === 0
-    })
-
-    if (hasInvalidQuestions) {
-      setErrorMessage('Each question needs text, and choice questions need options.')
-      return
-    }
-
-    const questions: QuestionInput[] = draft.questions.map((question) => ({
-      text: question.text.trim(),
-      type: question.type,
-      options: supportsOptions(question.type)
-        ? question.options.map((option) => option.trim()).filter(Boolean)
-        : undefined,
-    }))
-
-    try {
-      await createForm({
-        title,
-        description: draft.description.trim() || undefined,
-        questions,
-      }).unwrap()
-      dispatch(resetCreateDraft())
-      navigate('/')
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to save form.')
-    }
-  }
+  const { isLoading, errorMessage, saveForm } = useCreateFormBuilder()
 
   return (
     <div className="space-y-6">
@@ -109,7 +55,7 @@ export function CreateFormPage() {
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-slate-900">Questions</h3>
           <div className="flex gap-2">
-            {questionTypeOptions.map((typeOption) => (
+            {QUESTION_TYPE_OPTIONS.map((typeOption) => (
               <button
                 key={typeOption.value}
                 className="rounded-md bg-slate-100 px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-200"
@@ -170,7 +116,7 @@ export function CreateFormPage() {
                           )
                         }
                       >
-                        {questionTypeOptions.map((typeOption) => (
+                        {QUESTION_TYPE_OPTIONS.map((typeOption) => (
                           <option key={typeOption.value} value={typeOption.value}>
                             {typeOption.label}
                           </option>
@@ -208,7 +154,7 @@ export function CreateFormPage() {
                   </div>
                 </div>
 
-                {supportsOptions(question.type) && (
+                {isChoiceQuestionType(question.type) && (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-slate-700">Options</p>
@@ -277,7 +223,7 @@ export function CreateFormPage() {
         <button
           className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isLoading}
-          onClick={() => void handleSave()}
+          onClick={() => void saveForm()}
           type="button"
         >
           {isLoading ? 'Saving...' : 'Save Form'}

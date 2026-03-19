@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { FormsQuery, QuestionInput, QuestionType } from '../api/generated'
+import { isChoiceQuestionType } from '../utils/questionType'
 
 export type FormListItem = FormsQuery['forms'][number]
 
@@ -34,9 +35,6 @@ const initialState: FormsState = {
 
 const questionTypes: QuestionType[] = ['TEXT', 'MULTIPLE_CHOICE', 'CHECKBOX', 'DATE']
 
-const supportsOptions = (type: QuestionType) =>
-  type === 'MULTIPLE_CHOICE' || type === 'CHECKBOX'
-
 const formsSlice = createSlice({
   name: 'forms',
   initialState,
@@ -65,7 +63,7 @@ const formsSlice = createSlice({
         id: action.payload.id,
         text: '',
         type,
-        options: supportsOptions(type) ? [''] : [],
+        options: isChoiceQuestionType(type) ? [''] : [],
       })
     },
     removeDraftQuestion: (state, action: PayloadAction<string>) => {
@@ -104,7 +102,7 @@ const formsSlice = createSlice({
       const nextType = action.payload.patch.type ?? question.type
       question.text = action.payload.patch.text ?? question.text
       question.type = nextType
-      if (supportsOptions(nextType)) {
+      if (isChoiceQuestionType(nextType)) {
         question.options =
           action.payload.patch.options?.slice() ??
           (question.options.length > 0 ? question.options : [''])
@@ -116,7 +114,7 @@ const formsSlice = createSlice({
       const question = state.createDraft.questions.find(
         (item) => item.id === action.payload,
       )
-      if (!question || !supportsOptions(question.type)) return
+      if (!question || !isChoiceQuestionType(question.type)) return
       question.options.push('')
     },
     updateDraftQuestionOption: (
@@ -126,7 +124,7 @@ const formsSlice = createSlice({
       const question = state.createDraft.questions.find(
         (item) => item.id === action.payload.id,
       )
-      if (!question || !supportsOptions(question.type)) return
+      if (!question || !isChoiceQuestionType(question.type)) return
       question.options[action.payload.optionIndex] = action.payload.value
     },
     removeDraftQuestionOption: (
@@ -136,7 +134,7 @@ const formsSlice = createSlice({
       const question = state.createDraft.questions.find(
         (item) => item.id === action.payload.id,
       )
-      if (!question || !supportsOptions(question.type)) return
+      if (!question || !isChoiceQuestionType(question.type)) return
       question.options.splice(action.payload.optionIndex, 1)
       if (question.options.length === 0) {
         question.options.push('')
@@ -158,7 +156,7 @@ export const selectCreateFormMutationInput = (state: FormsState): {
   questions: state.createDraft.questions.map((question) => ({
     text: question.text.trim(),
     type: question.type,
-    options: supportsOptions(question.type)
+    options: isChoiceQuestionType(question.type)
       ? question.options.map((option) => option.trim()).filter(Boolean)
       : undefined,
   })),

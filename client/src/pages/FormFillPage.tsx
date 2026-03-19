@@ -1,80 +1,18 @@
-import { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import type { AnswerInput, QuestionType } from '../api/generated'
-import { useFormQuery, useSubmitResponseMutation } from '../api/enhancedApi'
-
-type AnswersState = Record<string, string | string[]>
-
-const isChoiceType = (type: QuestionType) =>
-  type === 'MULTIPLE_CHOICE' || type === 'CHECKBOX'
+import { isChoiceType, useFormFill } from '../hooks/useFormFill'
 
 export function FormFillPage() {
-  const { id = '' } = useParams()
-  const { data, isLoading, isError } = useFormQuery({ id }, { skip: id.length === 0 })
-  const [submitResponse, { isLoading: isSubmitting }] = useSubmitResponseMutation()
-  const [answers, setAnswers] = useState<AnswersState>({})
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null,
-  )
-
-  const form = data?.form
-
-  const preparedAnswers = useMemo<AnswerInput[]>(() => {
-    if (!form) return []
-    return form.questions.flatMap((question) => {
-      const raw = answers[question.id]
-      if (Array.isArray(raw)) {
-        return raw
-          .map((value) => value.trim())
-          .filter(Boolean)
-          .map((value) => ({ questionId: question.id, value }))
-      }
-      const value = (raw ?? '').trim()
-      return value ? [{ questionId: question.id, value }] : []
-    })
-  }, [answers, form])
-
-  const handleTextLikeChange = (questionId: string, value: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }))
-  }
-
-  const handleCheckboxChange = (questionId: string, option: string, checked: boolean) => {
-    setAnswers((prev) => {
-      const current = prev[questionId]
-      const currentArray = Array.isArray(current) ? current : []
-      const next = checked
-        ? Array.from(new Set([...currentArray, option]))
-        : currentArray.filter((value) => value !== option)
-      return { ...prev, [questionId]: next }
-    })
-  }
-
-  const handleSubmit = async () => {
-    setFeedback(null)
-    if (!form) return
-
-    if (preparedAnswers.length === 0) {
-      setFeedback({
-        type: 'error',
-        text: 'Please answer at least one question before submitting.',
-      })
-      return
-    }
-
-    try {
-      await submitResponse({
-        formId: form.id,
-        answers: preparedAnswers,
-      }).unwrap()
-      setFeedback({ type: 'success', text: 'Form submitted successfully!' })
-      setAnswers({})
-    } catch (error) {
-      setFeedback({
-        type: 'error',
-        text: error instanceof Error ? error.message : 'Failed to submit form.',
-      })
-    }
-  }
+  const {
+    form,
+    isLoading,
+    isError,
+    isSubmitting,
+    feedback,
+    getTextAnswer,
+    isChecked,
+    setTextAnswer,
+    setCheckboxAnswer,
+    submit,
+  } = useFormFill()
 
   if (isLoading) {
     return <p className="text-slate-600">Loading form...</p>
@@ -104,8 +42,8 @@ export function FormFillPage() {
           {question.type === 'TEXT' && (
             <input
               className="w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
-              value={typeof answers[question.id] === 'string' ? answers[question.id] : ''}
-              onChange={(event) => handleTextLikeChange(question.id, event.target.value)}
+              value={getTextAnswer(question.id)}
+              onChange={(event) => setTextAnswer(question.id, event.target.value)}
               placeholder="Type your answer"
             />
           )}
@@ -115,8 +53,8 @@ export function FormFillPage() {
               aria-label={`${question.text} date`}
               className="rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-500"
               type="date"
-              value={typeof answers[question.id] === 'string' ? answers[question.id] : ''}
-              onChange={(event) => handleTextLikeChange(question.id, event.target.value)}
+              value={getTextAnswer(question.id)}
+              onChange={(event) => setTextAnswer(question.id, event.target.value)}
             />
           )}
 
@@ -129,8 +67,8 @@ export function FormFillPage() {
                     <input
                       type="radio"
                       name={question.id}
-                      checked={answers[question.id] === option}
-                      onChange={() => handleTextLikeChange(question.id, option)}
+                      checked={getTextAnswer(question.id) === option}
+                      onChange={() => setTextAnswer(question.id, option)}
                     />
                     <span>{option}</span>
                   </label>
@@ -146,12 +84,9 @@ export function FormFillPage() {
                   <label key={option} className="flex items-center gap-2 text-slate-700">
                     <input
                       type="checkbox"
-                      checked={
-                        Array.isArray(answers[question.id]) &&
-                        answers[question.id].includes(option)
-                      }
+                      checked={isChecked(question.id, option)}
                       onChange={(event) =>
-                        handleCheckboxChange(question.id, option, event.target.checked)
+                        setCheckboxAnswer(question.id, option, event.target.checked)
                       }
                     />
                     <span>{option}</span>
@@ -182,7 +117,7 @@ export function FormFillPage() {
         <button
           className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isSubmitting}
-          onClick={() => void handleSubmit()}
+          onClick={() => void submit()}
           type="button"
         >
           {isSubmitting ? 'Submitting...' : 'Submit'}
