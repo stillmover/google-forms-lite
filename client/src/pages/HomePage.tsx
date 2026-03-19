@@ -7,7 +7,9 @@ import { setCurrentResponsesFormId } from '../store/responsesSlice';
 
 export function HomePage() {
   const dispatch = useAppDispatch();
-  const { data, isLoading, isError, error, refetch } = useFormsQuery();
+  const { data, isLoading, isError, error, refetch } = useFormsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   useEffect(() => {
     if (data?.forms) {

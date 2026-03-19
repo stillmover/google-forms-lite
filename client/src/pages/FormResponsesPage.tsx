@@ -9,8 +9,8 @@ import {
 
 export function FormResponsesPage() {
   const dispatch = useAppDispatch()
-  const { id, formId: legacyFormId } = useParams()
-  const formId = id ?? legacyFormId ?? ''
+  const { id = '' } = useParams()
+  const formId = id
 
   const {
     data: formData,

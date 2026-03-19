@@ -74,6 +74,7 @@ export const useFormFill = () => {
 
   return {
     form,
+    formId: form?.id ?? id,
     isLoading,
     isError,
     isSubmitting,
