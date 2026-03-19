@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@gfl/shared": "^1.0.0",
+    "@graphql-tools/schema": "^10.0.31",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "graphql": "^15.10.1",

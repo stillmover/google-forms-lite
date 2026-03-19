@@ -3,6 +3,7 @@ import { defineConfig } from '@eddeee888/gcg-typescript-resolver-files';
 
 const config: CodegenConfig = {
   schema: 'server/src/graphql/**/*.graphql',
+  documents: ['client/src/**/*.graphql'],
   generates: {
     'server/src/generated': defineConfig({
       resolverGeneration: 'minimal',
@@ -15,10 +16,11 @@ const config: CodegenConfig = {
     }),
 
     'client/src/api/generated.ts': {
-      plugins: ['typescript-operations', 'typescript-rtk-query'],
+      plugins: ['typescript', 'typescript-operations', 'typescript-rtk-query'],
       config: {
         importBaseApiFrom: './baseApi',
-        importTypesFrom: '@gfl/shared',
+        documentMode: 'graphQLTag',
+        enumsAsTypes: true,
         exportHooks: true,
       },
     },

@@ -1,0 +1,18 @@
+query Forms {
+  forms {
+    id
+    title
+    description
+  }
+}
+
+query Responses($formId: ID!) {
+  responses(formId: $formId) {
+    id
+    formId
+    answers {
+      questionId
+      value
+    }
+  }
+}
