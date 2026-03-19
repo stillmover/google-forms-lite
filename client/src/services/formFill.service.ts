@@ -28,7 +28,7 @@ export const toSubmitAnswersPayload = (
 
 export const validateSubmitAnswersPayload = (answers: AnswerInput[]): string | null => {
   if (answers.length === 0) {
-    return 'Please answer at least one question before submitting.'
+    return 'Please provide at least one answer before submitting the form.'
   }
   return null
 }

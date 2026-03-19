@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { isChoiceType, useFormFill } from '../hooks/useFormFill';
+import { ErrorState, LoadingState } from '../ui/AsyncState';
+import { Toast } from '../ui/Toast';
 
 export function FormFillPage() {
   const {
@@ -17,15 +19,11 @@ export function FormFillPage() {
   } = useFormFill();
 
   if (isLoading) {
-    return <p className="text-slate-600">Loading form...</p>;
+    return <LoadingState message="Loading form..." />;
   }
 
   if (isError || !form) {
-    return (
-      <p className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
-        Failed to load form.
-      </p>
-    );
+    return <ErrorState message="Failed to load form." />;
   }
 
   return (
@@ -121,25 +119,17 @@ export function FormFillPage() {
       ))}
 
       {feedback && (
-        <div
-          className={`rounded-md px-3 py-2 text-sm ${
-            feedback.type === 'success'
-              ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-              : 'border border-red-200 bg-red-50 text-red-700'
-          }`}
-        >
-          <p>
-            {feedback.text}{' '}
-            {feedback.type === 'success' && (
-              <Link
-                className="mt-2 underline"
-                to={`/forms/${formId}/responses`}
-              >
-                View responses
-              </Link>
-            )}
-          </p>
-        </div>
+        <>
+          <Toast type={feedback.type} message={feedback.text} />
+          {feedback.type === 'success' && (
+            <Link
+              className="inline-block text-sm text-slate-700 underline"
+              to={`/forms/${formId}/responses`}
+            >
+              View responses
+            </Link>
+          )}
+        </>
       )}
 
       <div className="flex justify-end">

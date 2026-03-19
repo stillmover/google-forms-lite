@@ -4,6 +4,8 @@ import { useFormsQuery } from '../api/enhancedApi';
 import { useAppDispatch } from '../store/hooks';
 import { setCurrentFormId, setForms } from '../store/formsSlice';
 import { setCurrentResponsesFormId } from '../store/responsesSlice';
+import { EmptyState, LoadingState } from '../ui/AsyncState';
+import { Toast } from '../ui/Toast';
 
 export function HomePage() {
   const dispatch = useAppDispatch();
@@ -18,21 +20,17 @@ export function HomePage() {
   }, [data, dispatch]);
 
   if (isLoading) {
-    return <p className="text-slate-600">Loading forms...</p>;
+    return <LoadingState message="Loading forms..." />;
   }
 
   if (isError) {
     return (
-      <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
-        <p>Failed to load forms.</p>
-        <p className="text-sm">{JSON.stringify(error)}</p>
-        <button
-          className="rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-500"
-          onClick={() => refetch()}
-        >
-          Retry
-        </button>
-      </div>
+      <Toast
+        type="error"
+        message={`Failed to load forms. ${JSON.stringify(error)}`}
+        actionLabel="Retry"
+        onAction={() => refetch()}
+      />
     );
   }
 
@@ -43,9 +41,7 @@ export function HomePage() {
       <h2 className="text-xl font-semibold text-slate-900">All forms</h2>
 
       {forms.length === 0 ? (
-        <p className="rounded-xl border border-slate-200 bg-white p-4 text-slate-600">
-          No forms yet. Create your first one.
-        </p>
+        <EmptyState message="No forms yet. Create your first one." />
       ) : (
         <ul className="space-y-3">
           {forms.map(form => (

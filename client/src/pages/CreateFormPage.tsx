@@ -12,6 +12,8 @@ import {
   updateDraftQuestion,
   updateDraftQuestionOption,
 } from '../store/formsSlice'
+import { EmptyState } from '../ui/AsyncState'
+import { Toast } from '../ui/Toast'
 import { QUESTION_TYPE_OPTIONS, isChoiceQuestionType } from '../utils/questionType'
 
 export function CreateFormPage() {
@@ -76,7 +78,7 @@ export function CreateFormPage() {
         </div>
 
         {draft.questions.length === 0 ? (
-          <p className="text-slate-600">No questions yet. Add one to start.</p>
+          <EmptyState message="No questions yet. Add one to start." />
         ) : (
           <ul className="space-y-3">
             {draft.questions.map((question, index) => (
@@ -207,9 +209,7 @@ export function CreateFormPage() {
       </section>
 
       {errorMessage && (
-        <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-          {errorMessage}
-        </p>
+        <Toast type="error" message={errorMessage} />
       )}
 
       <div className="flex justify-end gap-3">

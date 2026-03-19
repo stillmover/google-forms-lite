@@ -15,18 +15,27 @@ export type CreateFormPayload = {
 }
 
 export const validateCreateFormDraft = (draft: CreateDraftInput): string | null => {
-  if (!draft.title.trim()) {
-    return 'Form title is required.'
+  const normalizedTitle = draft.title.trim()
+  if (!normalizedTitle) {
+    return 'Please enter a form title.'
   }
 
-  const hasInvalidQuestions = draft.questions.some((question) => {
+  if (normalizedTitle.length < 3) {
+    return 'Form title should contain at least 3 characters.'
+  }
+
+  if (draft.questions.length === 0) {
+    return 'Please add at least one question.'
+  }
+
+  const invalidQuestionIndex = draft.questions.findIndex((question) => {
     if (!question.text.trim()) return true
     if (!isChoiceQuestionType(question.type)) return false
     return normalizeOptions(question.options).length === 0
   })
 
-  if (hasInvalidQuestions) {
-    return 'Each question needs text, and choice questions need options.'
+  if (invalidQuestionIndex >= 0) {
+    return `Please complete question #${invalidQuestionIndex + 1}. Choice questions need at least one option.`
   }
 
   return null

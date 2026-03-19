@@ -6,6 +6,7 @@ import {
   setCurrentResponsesFormId,
   setResponsesForForm,
 } from '../store/responsesSlice'
+import { EmptyState, ErrorState, LoadingState } from '../ui/AsyncState'
 
 export function FormResponsesPage() {
   const dispatch = useAppDispatch()
@@ -46,19 +47,17 @@ export function FormResponsesPage() {
       </div>
 
       {(isLoading || isFormLoading) && (
-        <p className="text-slate-600">Loading responses...</p>
+        <LoadingState message="Loading responses..." />
       )}
 
       {(isError || isFormError) && (
-        <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-red-700">
-          Failed to load responses.
-        </p>
+        <ErrorState message="Failed to load responses." />
       )}
 
       {!isLoading && !isError && !isFormLoading && !isFormError && (
         <>
           {storedResponses.length === 0 ? (
-            <p className="text-slate-600">No responses submitted yet.</p>
+            <EmptyState message="No responses submitted yet." />
           ) : (
             <ul className="space-y-3">
               {storedResponses.map((response, responseIndex) => (
