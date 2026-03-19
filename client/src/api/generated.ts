@@ -109,6 +109,15 @@ export type ResponsesQueryVariables = Exact<{
 
 export type ResponsesQuery = { __typename?: 'Query', responses: Array<{ __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: string }> }> };
 
+export type CreateFormMutationVariables = Exact<{
+  title: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  questions?: InputMaybe<Array<InputMaybe<QuestionInput>> | InputMaybe<QuestionInput>>;
+}>;
+
+
+export type CreateFormMutation = { __typename?: 'Mutation', createForm: { __typename?: 'Form', id: string, title: string, description?: string | null, questions: Array<{ __typename?: 'Question', id: string, text: string, type: QuestionType, options?: Array<string | null> | null }> } };
+
 
 export const FormsDocument = `
     query Forms {
@@ -131,6 +140,21 @@ export const ResponsesDocument = `
   }
 }
     `;
+export const CreateFormDocument = `
+    mutation CreateForm($title: String!, $description: String, $questions: [QuestionInput]) {
+  createForm(title: $title, description: $description, questions: $questions) {
+    id
+    title
+    description
+    questions {
+      id
+      text
+      type
+      options
+    }
+  }
+}
+    `;
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -140,9 +164,12 @@ const injectedRtkApi = api.injectEndpoints({
     Responses: build.query<ResponsesQuery, ResponsesQueryVariables>({
       query: (variables) => ({ document: ResponsesDocument, variables })
     }),
+    CreateForm: build.mutation<CreateFormMutation, CreateFormMutationVariables>({
+      query: (variables) => ({ document: CreateFormDocument, variables })
+    }),
   }),
 });
 
 export { injectedRtkApi as api };
-export const { useFormsQuery, useLazyFormsQuery, useResponsesQuery, useLazyResponsesQuery } = injectedRtkApi;
+export const { useFormsQuery, useLazyFormsQuery, useResponsesQuery, useLazyResponsesQuery, useCreateFormMutation } = injectedRtkApi;
 
