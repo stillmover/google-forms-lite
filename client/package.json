@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "@rtk-query/graphql-request-base-query": "^2.3.2",
+    "clsx": "^2.1.1",
     "graphql-request": "^6.1.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
