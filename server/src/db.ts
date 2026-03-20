@@ -32,14 +32,14 @@ const mockForms = [
       {
         id: 'q-4',
         text: 'Preferred workshop track',
-        type: 'MULTIPLE_CHOICE',
+        type: 'CHECKBOX',
         options: ['Frontend', 'Backend', 'DevOps'],
       },
       {
         id: 'q-5',
         text: 'Need a certificate?',
-        type: 'CHECKBOX',
-        options: ['Yes'],
+        type: 'MULTIPLE_CHOICE',
+        options: ['Yes', 'No'],
       },
     ],
   },

@@ -5,5 +5,13 @@ export const form: NonNullable<QueryResolvers['form']> = async (
   _parent,
   { id },
 ) => {
-  return db.forms.find(f => f.id === id) ?? null;
+  const found = db.forms.find(f => f.id === id);
+  if (!found) return undefined;
+  return {
+    ...found,
+    questions: found.questions.map(q => ({
+      ...q,
+      type: q.type as 'MULTIPLE_CHOICE' | 'TEXT' | 'CHECKBOX' | 'DATE',
+    })),
+  };
 };

@@ -11,14 +11,18 @@ export const createForm: NonNullable<MutationResolvers['createForm']> = async (
   const newForm = {
     id: uuid(),
     title,
-    description: description ?? null,
+    description: description ?? '',
     questions: safeQuestions
       .filter(q => q != null)
       .map(q => ({
         id: uuid(),
         text: q.text,
-        type: q.type,
-        options: q.options ?? null,
+        type: (["CHECKBOX", "DATE", "MULTIPLE_CHOICE", "TEXT"].includes(q.type)
+          ? q.type
+          : "TEXT") as "CHECKBOX" | "DATE" | "MULTIPLE_CHOICE" | "TEXT",
+        options: Array.isArray(q.options)
+          ? q.options.filter(opt => typeof opt === 'string')
+          : null,
       })),
   };
 
