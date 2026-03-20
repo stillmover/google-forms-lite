@@ -1,12 +1,12 @@
-import type { QuestionModel } from '../../types/question';
+import type { DraftQuestion } from '../../store/formsSlice';
 import type { QuestionType } from '../../api/generated';
 import { Button } from '../../ui';
 
 type Props = {
-  question: QuestionModel;
+  question: DraftQuestion;
   index: number;
 
-  onUpdateQuestion: (id: string, patch: Partial<QuestionModel>) => void;
+  onUpdateQuestion: (id: string, patch: Partial<DraftQuestion>) => void;
   onMoveQuestion: (id: string, direction: 'up' | 'down') => void;
   onRemoveQuestion: (id: string) => void;
 

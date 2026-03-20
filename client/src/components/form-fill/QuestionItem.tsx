@@ -28,6 +28,7 @@ export function QuestionItem({
 
       {question.type === 'TEXT' && (
         <Input
+          className="w-full"
           value={getTextAnswer(question.id)}
           onChange={event => setTextAnswer(question.id, event.target.value)}
           placeholder="Type your answer"

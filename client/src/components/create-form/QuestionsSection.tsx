@@ -1,14 +1,14 @@
 import { QuestionItem } from './QuestionsItem';
 import type { QuestionType } from '../../api/generated';
 import { QUESTION_TYPE_OPTIONS } from '../../utils/questionType';
-import type { QuestionModel } from '../../types/question';
+import type { DraftQuestion } from '../../store/formsSlice';
 import { Button } from '../../ui';
 
 type Props = {
-  questions: QuestionModel[];
+  questions: DraftQuestion[];
 
   onAddQuestion: (type: QuestionType) => void;
-  onUpdateQuestion: (id: string, patch: Partial<QuestionModel>) => void;
+  onUpdateQuestion: (id: string, patch: Partial<DraftQuestion>) => void;
   onMoveQuestion: (id: string, direction: 'up' | 'down') => void;
   onRemoveQuestion: (id: string) => void;
 
