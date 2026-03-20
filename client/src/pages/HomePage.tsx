@@ -1,4 +1,4 @@
-import { FormsList } from '../components/forms/FormsList';
+import { FormsList } from '../components/forms-list/FormsList';
 import { EmptyState, LoadingState } from '../ui/AsyncState';
 import { Toast } from '../ui/Toast';
 import { useHomePage } from '../hooks/useHomePage';
