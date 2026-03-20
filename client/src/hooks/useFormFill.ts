@@ -1,76 +1,84 @@
-import { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import type { QuestionType } from '../api/generated'
-import { useFormQuery, useSubmitResponseMutation } from '../api/enhancedApi'
+import { useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import type { QuestionType } from '../api/generated';
+import { useFormQuery, useSubmitResponseMutation } from '../api/enhancedApi';
 import {
   toSubmitAnswersPayload,
   type AnswersState,
   validateSubmitAnswersPayload,
-} from '../services/formFill.service'
+} from '../services/formFill.service';
 
-type FeedbackState = { type: 'success' | 'error'; text: string } | null
+type FeedbackState = { type: 'success' | 'error'; text: string } | null;
 
 export const useFormFill = () => {
-  const { id = '' } = useParams()
-  const { data, isLoading, isError } = useFormQuery({ id }, { skip: id.length === 0 })
-  const [submitResponse, { isLoading: isSubmitting }] = useSubmitResponseMutation()
-  const [answers, setAnswers] = useState<AnswersState>({})
-  const [feedback, setFeedback] = useState<FeedbackState>(null)
+  const { id = '' } = useParams();
+  const { data, isLoading, isError } = useFormQuery(
+    { id },
+    { skip: id.length === 0 },
+  );
+  const [submitResponse, { isLoading: isSubmitting }] =
+    useSubmitResponseMutation();
+  const [answers, setAnswers] = useState<AnswersState>({});
+  const [feedback, setFeedback] = useState<FeedbackState>(null);
 
-  const form = data?.form
+  const form = data?.form;
 
   const preparedAnswers = useMemo(
     () => toSubmitAnswersPayload(form, answers),
     [answers, form],
-  )
+  );
 
   const setTextAnswer = (questionId: string, value: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }))
-  }
+    setAnswers(prev => ({ ...prev, [questionId]: value }));
+  };
 
-  const setCheckboxAnswer = (questionId: string, option: string, checked: boolean) => {
-    setAnswers((prev) => {
-      const current = prev[questionId]
-      const currentArray = Array.isArray(current) ? current : []
+  const setCheckboxAnswer = (
+    questionId: string,
+    option: string,
+    checked: boolean,
+  ) => {
+    setAnswers(prev => {
+      const current = prev[questionId];
+      const currentArray = Array.isArray(current) ? current : [];
       const next = checked
         ? Array.from(new Set([...currentArray, option]))
-        : currentArray.filter((value) => value !== option)
-      return { ...prev, [questionId]: next }
-    })
-  }
+        : currentArray.filter(value => value !== option);
+      return { ...prev, [questionId]: next };
+    });
+  };
 
   const isChecked = (questionId: string, option: string) =>
-    Array.isArray(answers[questionId]) && answers[questionId].includes(option)
+    Array.isArray(answers[questionId]) && answers[questionId].includes(option);
 
   const getTextAnswer = (questionId: string) =>
-    typeof answers[questionId] === 'string' ? answers[questionId] : ''
+    typeof answers[questionId] === 'string' ? answers[questionId] : '';
 
   const submit = async () => {
-    setFeedback(null)
-    if (!form) return false
+    setFeedback(null);
+    if (!form) return false;
 
-    const validationError = validateSubmitAnswersPayload(preparedAnswers)
+    const validationError = validateSubmitAnswersPayload(preparedAnswers);
     if (validationError) {
-      setFeedback({ type: 'error', text: validationError })
-      return false
+      setFeedback({ type: 'error', text: validationError });
+      return false;
     }
 
     try {
       await submitResponse({
         formId: form.id,
         answers: preparedAnswers,
-      }).unwrap()
-      setFeedback({ type: 'success', text: 'Form submitted successfully!' })
-      setAnswers({})
-      return true
+      }).unwrap();
+      setFeedback({ type: 'success', text: 'Form submitted successfully!' });
+      setAnswers({});
+      return true;
     } catch (error) {
       setFeedback({
         type: 'error',
         text: error instanceof Error ? error.message : 'Failed to submit form.',
-      })
-      return false
+      });
+      return false;
     }
-  }
+  };
 
   return {
     form,
@@ -84,8 +92,8 @@ export const useFormFill = () => {
     setTextAnswer,
     setCheckboxAnswer,
     submit,
-  }
-}
+  };
+};
 
 export const isChoiceType = (type: QuestionType) =>
-  type === 'MULTIPLE_CHOICE' || type === 'CHECKBOX'
+  type === 'MULTIPLE_CHOICE' || type === 'CHECKBOX';
