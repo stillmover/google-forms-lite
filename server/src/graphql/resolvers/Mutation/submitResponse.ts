@@ -1,25 +1,18 @@
-import { db } from 'server/src/db';
 import { v4 as uuid } from 'uuid';
 import type { MutationResolvers } from './../../../generated/types.generated';
+import { db } from 'server/src/db';
 
 export const submitResponse: NonNullable<
   MutationResolvers['submitResponse']
-> = async (_parent, { formId, answers }, _ctx) => {
+> = async (_parent, { formId, answers }) => {
   const newResponse = {
     id: uuid(),
     formId,
     answers: answers
-      .filter(
-        (
-          answer,
-        ): answer is {
-          questionId: string;
-          value: string;
-        } => answer != null,
-      )
-      .map(answer => ({
-        questionId: answer.questionId,
-        value: answer.value,
+      .filter((a) => a != null)
+      .map((a) => ({
+        questionId: a.questionId,
+        value: a.value,
       })),
   };
 

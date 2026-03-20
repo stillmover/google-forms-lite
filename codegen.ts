@@ -12,7 +12,7 @@ const config: CodegenConfig = {
       resolverTypesPath: './types.generated.ts',
       resolverMainFile: './resolvers.generated.ts',
       typeDefsFilePath: './typeDefs.generated.ts',
-      tsConfigFilePath: '../../../tsconfig.base.json',
+      tsConfigFilePath: './tsconfig.base.json',
     }),
 
     'client/src/api/generated.ts': {
@@ -33,10 +33,6 @@ const config: CodegenConfig = {
         enumsAsTypes: true,
         exportHooks: true,
       },
-    },
-
-    'packages/shared/src/types/index.ts': {
-      plugins: ['typescript'],
     },
   },
 };

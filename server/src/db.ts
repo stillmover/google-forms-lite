@@ -1,6 +1,4 @@
-import { Form, QuestionType, Response } from '@gfl/shared'
-
-const mockForms: Form[] = [
+const mockForms = [
   {
     id: 'form-1',
     title: 'Customer Satisfaction Survey',
@@ -9,13 +7,13 @@ const mockForms: Form[] = [
       {
         id: 'q-1',
         text: 'How satisfied are you with our service?',
-        type: QuestionType.MultipleChoice,
+        type: 'MULTIPLE_CHOICE',
         options: ['Very satisfied', 'Satisfied', 'Neutral', 'Unsatisfied'],
       },
       {
         id: 'q-2',
         text: 'What can we improve?',
-        type: QuestionType.Text,
+        type: 'TEXT',
         options: null,
       },
     ],
@@ -28,26 +26,26 @@ const mockForms: Form[] = [
       {
         id: 'q-3',
         text: 'Your full name',
-        type: QuestionType.Text,
+        type: 'TEXT',
         options: null,
       },
       {
         id: 'q-4',
         text: 'Preferred workshop track',
-        type: QuestionType.MultipleChoice,
+        type: 'MULTIPLE_CHOICE',
         options: ['Frontend', 'Backend', 'DevOps'],
       },
       {
         id: 'q-5',
         text: 'Need a certificate?',
-        type: QuestionType.Checkbox,
+        type: 'CHECKBOX',
         options: ['Yes'],
       },
     ],
   },
-]
+];
 
-const mockResponses: Response[] = [
+const mockResponses = [
   {
     id: 'resp-1',
     formId: 'form-1',
@@ -56,7 +54,7 @@ const mockResponses: Response[] = [
       { questionId: 'q-2', value: 'Faster support replies' },
     ],
   },
-]
+];
 
 export const db = {
   forms: mockForms,
