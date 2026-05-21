@@ -1,4 +1,6 @@
-const mockForms = [
+import type { Form } from './generated/types.generated'; 
+
+const mockForms: Form[] = [
   {
     id: 'form-1',
     title: 'Customer Satisfaction Survey',

@@ -11,7 +11,7 @@ export const createForm: NonNullable<MutationResolvers['createForm']> = async (
   const newForm = {
     id: uuid(),
     title,
-    description: description ?? '',
+    description: description ?? null,
     questions: safeQuestions
       .filter(q => q != null)
       .map(q => ({
