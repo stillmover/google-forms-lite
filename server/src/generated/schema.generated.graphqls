@@ -1,11 +1,11 @@
 type Answer {
   questionId: ID!
-  value: String!
+  value: [String!]!
 }
 
 input AnswerInput {
   questionId: ID!
-  value: String!
+  value: [String!]!
 }
 
 type Form {

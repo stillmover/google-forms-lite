@@ -21,12 +21,12 @@ export type Scalars = {
 export type Answer = {
   __typename?: 'Answer';
   questionId: Scalars['ID']['output'];
-  value: Scalars['String']['output'];
+  value: Array<Scalars['String']['output']>;
 };
 
 export type AnswerInput = {
   questionId: Scalars['ID']['input'];
-  value: Scalars['String']['input'];
+  value: Array<Scalars['String']['input']>;
 };
 
 export type Form = {
@@ -204,7 +204,7 @@ export type ResolversParentTypes = {
 
 export type AnswerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Answer'] = ResolversParentTypes['Answer']> = {
   questionId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type FormResolvers<ContextType = any, ParentType extends ResolversParentTypes['Form'] = ResolversParentTypes['Form']> = {

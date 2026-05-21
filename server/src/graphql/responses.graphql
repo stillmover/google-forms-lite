@@ -1,6 +1,6 @@
 type Answer {
   questionId: ID!
-  value: String!
+  value: [String!]! 
 }
 
 type Response {
@@ -11,7 +11,7 @@ type Response {
 
 input AnswerInput {
   questionId: ID!
-  value: String!
+  value: [String!]!
 }
 
 extend type Query {

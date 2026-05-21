@@ -50,8 +50,17 @@ const mockResponses = [
     id: 'resp-1',
     formId: 'form-1',
     answers: [
-      { questionId: 'q-1', value: 'Satisfied' },
-      { questionId: 'q-2', value: 'Faster support replies' },
+      { questionId: 'q-1', value: ['Satisfied'] },
+      { questionId: 'q-2', value: ['Faster support replies'] },
+    ],
+  },
+  {
+    id: 'resp-2',
+    formId: 'form-2',
+    answers: [
+      { questionId: 'q-3', value: ['John Doe'] },
+      { questionId: 'q-4', value: ['Frontend', 'DevOps'] },
+      { questionId: 'q-5', value: ['Yes'] },
     ],
   },
 ];

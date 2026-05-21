@@ -19,12 +19,12 @@ export type Scalars = {
 export type Answer = {
   __typename?: 'Answer';
   questionId: Scalars['ID']['output'];
-  value: Scalars['String']['output'];
+  value: Array<Scalars['String']['output']>;
 };
 
 export type AnswerInput = {
   questionId: Scalars['ID']['input'];
-  value: Scalars['String']['input'];
+  value: Array<Scalars['String']['input']>;
 };
 
 export type Form = {
@@ -115,7 +115,7 @@ export type ResponsesQueryVariables = Exact<{
 }>;
 
 
-export type ResponsesQuery = { __typename?: 'Query', responses: Array<{ __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: string }> }> };
+export type ResponsesQuery = { __typename?: 'Query', responses: Array<{ __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: Array<string> }> }> };
 
 export type CreateFormMutationVariables = Exact<{
   title: Scalars['String']['input'];
@@ -132,7 +132,7 @@ export type SubmitResponseMutationVariables = Exact<{
 }>;
 
 
-export type SubmitResponseMutation = { __typename?: 'Mutation', submitResponse: { __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: string }> } };
+export type SubmitResponseMutation = { __typename?: 'Mutation', submitResponse: { __typename?: 'Response', id: string, formId: string, answers: Array<{ __typename?: 'Answer', questionId: string, value: Array<string> }> } };
 
 
 export const FormsDocument = new TypedDocumentString(`
