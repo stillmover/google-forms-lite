@@ -1,4 +1,4 @@
-import { db } from 'server/src/db';
+import { db } from '../../../db';
 import { v4 as uuid } from 'uuid';
 import type { MutationResolvers } from './../../../generated/types.generated';
 

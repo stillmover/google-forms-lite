@@ -1,5 +1,5 @@
 import type { QueryResolvers } from './../../../generated/types.generated';
-import { db } from 'server/src/db';
+import { db } from '../../../db';
 
 export const form: NonNullable<QueryResolvers['form']> = async (
   _parent,

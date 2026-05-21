@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import type { MutationResolvers } from './../../../generated/types.generated';
-import { db } from 'server/src/db';
+import { db } from '../../../db';
 
 export const submitResponse: NonNullable<
   MutationResolvers['submitResponse']
