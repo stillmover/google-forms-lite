@@ -16,6 +16,7 @@ import {
   updateCreateDraft,
   updateDraftQuestion,
   updateDraftQuestionOption,
+  type DraftQuestion,
 } from '../store/formsSlice';
 import type { QuestionType } from '../api/generated';
 
@@ -43,7 +44,7 @@ export function useCreateForm() {
       }),
     );
 
-  const updateQuestion = (id: string, patch: any) =>
+  const updateQuestion = (id: string, patch: Partial<DraftQuestion>) =>
     dispatch(updateDraftQuestion({ id, patch }));
 
   const moveQuestion = (id: string, direction: 'up' | 'down') =>
