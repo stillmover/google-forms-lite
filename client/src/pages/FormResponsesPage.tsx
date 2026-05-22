@@ -1,6 +1,6 @@
 import { LoadingState, ErrorState } from '../ui/AsyncState';
 import { useFormResponses } from '../hooks/useFormResponses';
-import { FormResponsesLayout } from '../components/rensponses/FormResponseLayout';
+import { FormResponsesLayout } from '../components/responses/FormResponseLayout';
 
 export function FormResponsesPage() {
   const state = useFormResponses();

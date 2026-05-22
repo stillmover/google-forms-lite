@@ -1,4 +1,4 @@
-import { QuestionItem } from './QuestionsItem';
+import { QuestionItem } from './QuestionItem';
 import type { QuestionType } from '../../api/generated';
 import { QUESTION_TYPE_OPTIONS } from '../../utils/questionType';
 import type { DraftQuestion } from '../../store/formsSlice';
