@@ -1,9 +1,11 @@
 import { EmptyState } from '../../ui/AsyncState';
 import { ResponseItem } from './ResponseItem';
 import type { FormQuery } from '../../api/generated';
-import type { ResponseListItem } from '../../store/responsesSlice';
+import type { ResponsesQuery } from '../../api/generated';
+
 
 type QuestionByIdItem = NonNullable<FormQuery['form']>['questions'][number];
+type ResponseListItem = ResponsesQuery['responses'][number];
 type Props = {
   form?: FormQuery['form'];
   formId: string;

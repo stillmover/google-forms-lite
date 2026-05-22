@@ -1,5 +1,7 @@
 import type { FormQuery } from '../../api/generated';
-import type { ResponseListItem } from '../../store/responsesSlice';
+import type { ResponsesQuery } from '../../api/generated';
+
+type ResponseListItem = ResponsesQuery['responses'][number];
 
 type QuestionItem = NonNullable<FormQuery['form']>['questions'][number];
 type Props = {
