@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { FormsQuery, QuestionInput, QuestionType } from '../api/generated'
-import { isChoiceQuestionType } from '../utils/questionType'
+import type { FormsQuery, QuestionType } from '../api/generated'
+import { isChoiceQuestionType, QUESTION_TYPE_OPTIONS } from '../utils/questionType'
 
 export type FormListItem = FormsQuery['forms'][number]
 
@@ -18,12 +18,10 @@ type CreateFormDraft = {
 }
 
 type FormsState = {
-  list: FormListItem[]
   createDraft: CreateFormDraft
 }
 
 const initialState: FormsState = {
-  list: [],
   createDraft: {
     title: '',
     description: '',
@@ -31,15 +29,10 @@ const initialState: FormsState = {
   },
 }
 
-const questionTypes: QuestionType[] = ['TEXT', 'MULTIPLE_CHOICE', 'CHECKBOX', 'DATE']
-
 const formsSlice = createSlice({
   name: 'forms',
   initialState,
   reducers: {
-    setForms: (state, action: PayloadAction<FormListItem[]>) => {
-      state.list = action.payload
-    },
     updateCreateDraft: (state, action: PayloadAction<Partial<CreateFormDraft>>) => {
       state.createDraft = {
         ...state.createDraft,
@@ -50,8 +43,10 @@ const formsSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; type?: QuestionType }>,
     ) => {
+      const validTypes = QUESTION_TYPE_OPTIONS.map(option => option.value);
+
       const type =
-        action.payload.type && questionTypes.includes(action.payload.type)
+        action.payload.type && validTypes.includes(action.payload.type)
           ? action.payload.type
           : 'TEXT'
       state.createDraft.questions.push({
@@ -141,24 +136,7 @@ const formsSlice = createSlice({
   },
 })
 
-export const selectCreateFormMutationInput = (state: FormsState): {
-  title: string
-  description?: string
-  questions: QuestionInput[]
-} => ({
-  title: state.createDraft.title.trim(),
-  description: state.createDraft.description.trim() || undefined,
-  questions: state.createDraft.questions.map((question) => ({
-    text: question.text.trim(),
-    type: question.type,
-    options: isChoiceQuestionType(question.type)
-      ? question.options.map((option) => option.trim()).filter(Boolean)
-      : undefined,
-  })),
-})
-
 export const {
-  setForms,
   updateCreateDraft,
   addDraftQuestion,
   removeDraftQuestion,

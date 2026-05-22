@@ -1,6 +1,7 @@
 import { db } from '../../../db';
 import { v4 as uuid } from 'uuid';
 import type { MutationResolvers } from './../../../generated/types.generated';
+import { normalizeQuestionType } from '../utils/question';
 
 export const createForm: NonNullable<MutationResolvers['createForm']> = async (
   _parent,
@@ -17,9 +18,7 @@ export const createForm: NonNullable<MutationResolvers['createForm']> = async (
       .map(q => ({
         id: uuid(),
         text: q.text,
-        type: (["CHECKBOX", "DATE", "MULTIPLE_CHOICE", "TEXT"].includes(q.type)
-          ? q.type
-          : "TEXT") as "CHECKBOX" | "DATE" | "MULTIPLE_CHOICE" | "TEXT",
+        type: normalizeQuestionType(q.type),
         options: Array.isArray(q.options)
           ? q.options.filter(opt => typeof opt === 'string')
           : null,

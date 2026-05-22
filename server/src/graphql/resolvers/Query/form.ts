@@ -1,5 +1,6 @@
-import type { QueryResolvers } from './../../../generated/types.generated';
+import type { QueryResolvers } from '../../../generated/types.generated';
 import { db } from '../../../db';
+import { normalizeQuestionType } from '../utils/question';
 
 export const form: NonNullable<QueryResolvers['form']> = async (
   _parent,
@@ -7,11 +8,12 @@ export const form: NonNullable<QueryResolvers['form']> = async (
 ) => {
   const found = db.forms.find(f => f.id === id);
   if (!found) return undefined;
+
   return {
     ...found,
     questions: found.questions.map(q => ({
       ...q,
-      type: q.type as 'MULTIPLE_CHOICE' | 'TEXT' | 'CHECKBOX' | 'DATE',
+      type: normalizeQuestionType(q.type),
     })),
   };
 };

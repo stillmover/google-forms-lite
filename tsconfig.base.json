@@ -10,8 +10,5 @@
     "isolatedModules": true,
     "noEmit": true,
     "baseUrl": ".",
-    "paths": {
-      "@gfl/shared": ["packages/shared/src/index.ts"]
-    }
   }
 }

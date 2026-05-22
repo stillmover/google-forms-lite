@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { QuestionType } from '../api/generated';
 import { useFormQuery, useSubmitResponseMutation } from '../api/enhancedApi';
 import {
   toSubmitAnswersPayload,
@@ -94,6 +93,3 @@ export const useFormFill = () => {
     submit,
   };
 };
-
-export const isChoiceType = (type: QuestionType) =>
-  type === 'MULTIPLE_CHOICE' || type === 'CHECKBOX';

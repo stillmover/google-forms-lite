@@ -1,5 +1,4 @@
-import type { FormQuery } from '../../api/generated';
-import type { ResponsesQuery } from '../../api/generated';
+import type { FormQuery, ResponsesQuery } from '../../api/generated';
 
 type ResponseListItem = ResponsesQuery['responses'][number];
 
@@ -29,7 +28,7 @@ export function ResponseItem({ response, index, questionById }: Props) {
               <p className="text-sm font-medium text-slate-800">
                 {question?.text ?? `Question ${answer.questionId}`}
               </p>
-              <p className="text-slate-700">{answer.value}</p>
+              <p className="text-slate-700">{answer.value.join(', ')}</p>
             </li>
           );
         })}
