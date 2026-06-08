@@ -5,6 +5,8 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { typeDefs } from './generated/typeDefs.generated';
 import { resolvers } from './generated/resolvers.generated';
 
+const PORT = process.env.PORT ?? 4000;
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -17,4 +19,4 @@ app.all('/graphql', createHandler({
   schema,
 }));
 
-app.listen(4000, () => console.log('Server on http://localhost:4000/graphql'));
+app.listen(PORT, () => console.log(`Server on port ${PORT}`));
