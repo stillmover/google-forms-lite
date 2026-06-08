@@ -9,7 +9,10 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: Number(process.env.PORT) || 5173,
-    allowedHosts: ['client-production-cd4c.up.railway.app'],
+    allowedHosts: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    allowedHosts: true,
   },
 });
