@@ -7,8 +7,11 @@ type GraphqlQueryArgs = {
   variables?: Record<string, unknown> | void
 }
 
+const graphqlUrl = import.meta.env.VITE_GRAPHQL_URL
+  ?? (import.meta.env.PROD ? '/graphql' : 'http://localhost:4000/graphql');
+  
 const rawGraphqlBaseQuery = graphqlRequestBaseQuery({
-  url: import.meta.env.VITE_GRAPHQL_URL ?? 'http://localhost:4000/graphql',
+  url: graphqlUrl,
 })
 
 const graphqlBaseQuery: BaseQueryFn<GraphqlQueryArgs, unknown, unknown> = async (

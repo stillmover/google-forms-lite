@@ -4,8 +4,10 @@ import cors from 'cors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { typeDefs } from './generated/typeDefs.generated';
 import { resolvers } from './generated/resolvers.generated';
+import path from 'path';
 
 const PORT = process.env.PORT ?? 4000;
+const isProd = process.env.NODE_ENV === 'production';
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -13,10 +15,23 @@ const schema = makeExecutableSchema({
 });
 
 const app = express();
-app.use(cors()); 
+app.use(cors());
 
-app.all('/graphql', createHandler({ 
-  schema,
-}));
+app.all(
+  '/graphql',
+  createHandler({
+    schema,
+  }),
+);
 
-app.listen(PORT, () => console.log(`Server on port ${PORT}`));
+if (isProd) {
+  const clientDist = path.join(__dirname, '..', '..', 'client', 'dist');
+  app.use(express.static(clientDist));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
+
+app.listen(Number(PORT), '0.0.0.0', () =>
+  console.log(`Server on port ${PORT}`),
+);

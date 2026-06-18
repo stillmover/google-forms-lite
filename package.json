@@ -10,7 +10,7 @@
     "codegen": "graphql-codegen --config codegen.ts",
     "codegen:watch": "graphql-codegen --config codegen.ts --watch",
     "build": "npm run build -w server && npm run build -w client",
-    "start": "npm run start -w server"
+    "start": "NODE_ENV=production node server/dist/index.js"
   },
   "keywords": [],
   "author": "",
