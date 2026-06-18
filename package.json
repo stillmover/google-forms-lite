@@ -12,6 +12,9 @@
     "build": "npm run build -w server && npm run build -w client",
     "start": "NODE_ENV=production node server/dist/index.js"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
